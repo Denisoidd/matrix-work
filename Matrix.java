@@ -1,12 +1,10 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 
-public class Matrix {
+class Matrix {
     private int[][] array;
 
-    public static int size;
+    private static int size;
 
     public int[][] getMatrix(){
         return array;
@@ -28,11 +26,11 @@ public class Matrix {
                 matrix[i][j] = Integer.parseInt(strArr[j]);
             }
         }
+        reader.close();
         this.array = matrix;
     }
 
-    public void writeMatrix(){
-        int[][] matrix = array;
+    public static void writeOnScreen(int[][] matrix){
         for (int i = 0; i < size; i++){
             for (int j = 0; j < size; j++){
                 System.out.print(matrix[i][j]);
@@ -42,9 +40,17 @@ public class Matrix {
         }
     }
 
-    public static void main(String[] args) throws IOException{
-        int[][] matrix = new Matrix().getMatrix();
-        Matrix a = new Matrix();
-        a.writeMatrix();
+    public static void writeOnFile(int[][] array) throws IOException{
+        BufferedWriter writer = new BufferedWriter(new FileWriter("C:/Users/Denis/Desktop/MatrixResult.txt"));
+        for (int i = 0; i < size; i++){
+            for (int j = 0; j < size; j++){
+                String element = String.valueOf(array[i][j]);
+                writer.write(element);
+                writer.write(" ");
+            }
+            writer.newLine();
+        }
+        writer.close();
     }
+
 }
