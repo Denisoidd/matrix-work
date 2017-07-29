@@ -5,10 +5,13 @@ import java.io.IOException;
 
 public class Matrix {
     private int[][] array;
+
     public static int size;
+
     public int[][] getMatrix(){
         return array;
     }
+
     public Matrix() throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader("C:/Users/Denis/Desktop/Matrix3x3.txt"));
         String sizeString = reader.readLine();
@@ -27,8 +30,9 @@ public class Matrix {
         }
         this.array = matrix;
     }
-    /*public void writeMatrix(){
-        int[][] matrix = this.array;
+
+    public void writeMatrix(){
+        int[][] matrix = array;
         for (int i = 0; i < size; i++){
             for (int j = 0; j < size; j++){
                 System.out.print(matrix[i][j]);
@@ -36,16 +40,11 @@ public class Matrix {
             }
             System.out.println();
         }
-    }*/
+    }
 
     public static void main(String[] args) throws IOException{
         int[][] matrix = new Matrix().getMatrix();
-        for (int i = 0; i < size; i++){
-            for (int j = 0; j < size; j++){
-                System.out.print(matrix[i][j]);
-                System.out.print(" ");
-            }
-            System.out.println();
-        }
+        Matrix a = new Matrix();
+        a.writeMatrix();
     }
 }
