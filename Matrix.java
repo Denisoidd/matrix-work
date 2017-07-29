@@ -9,7 +9,7 @@ public class Matrix {
     public int[][] getMatrix(){
         return array;
     }
-    private Matrix() throws IOException {
+    public Matrix() throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader("C:/Users/Denis/Desktop/Matrix3x3.txt"));
         String sizeString = reader.readLine();
 
@@ -18,20 +18,11 @@ public class Matrix {
 
         int[][] matrix = new int[size][size];
         int line = 0;
-        while (true) {
+        for (int i=0; i < size; i++){
             String string = reader.readLine();
-            if (!string.isEmpty()) {
-                String[] arr = string.split(" ");
-                int column = 0;
-                for (String element : arr) {
-                    int elementInt = Integer.parseInt(element);
-                    matrix[line][column] = elementInt;
-                    column++;
-                }
-                line++;
-            }
-            else {
-                break;
+            String[] strArr = string.split(" ");
+            for (int j=0; j < size; j++){
+                matrix[i][j] = Integer.parseInt(strArr[j]);
             }
         }
         this.array = matrix;
