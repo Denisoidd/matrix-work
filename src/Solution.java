@@ -14,8 +14,9 @@ public class Solution {
         m2.writeToFile(Matrix.path);
         m3 = m1.transpose(); //check transpose method
         m3.writeOnScreen();
-        //m4 = m3.multiply(m2); //check multiplication method
-        //m4.writeOnScreen();
+        m4 = m3.multiply(m2); //check multiplication method
+        m4.writeOnScreen();
 
+        System.out.println(m1);
     }
 }

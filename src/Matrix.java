@@ -7,8 +7,10 @@ class Matrix /*extends MatrixOperations*/{
     private int numberOfColumns;
     final static public String path = "C:/Users/Denis/Desktop/Res.txt";
 
-    public Matrix(String way) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(way));
+
+
+    public Matrix(String path) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(path));
         String sizeString = reader.readLine();
         char[] sizes = sizeString.toCharArray();
         int lines =  sizes[0] - 48; //size of matrix (it's written in the file)
@@ -110,5 +112,10 @@ class Matrix /*extends MatrixOperations*/{
             System.err.println("Incompatible sizes of Matrix during multiplication");
             return null;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Hello, world, this is my matrix...";
     }
 }
