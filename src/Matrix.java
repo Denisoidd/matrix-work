@@ -1,4 +1,5 @@
 import java.io.*;
+import java.security.InvalidParameterException;
 
 /*
     This class is created for Matrix operating.
@@ -31,6 +32,17 @@ class Matrix {
     private int numberOfRows;
     private int numberOfColumns;
     final static public String path = "C:/Users/Denis/Desktop/Res.txt";
+
+    Matrix(double[][] inputArray) throws UnsupportedOperationException {
+        array = inputArray;
+        numberOfRows = this.array.length;
+        if (array.length != 0) {
+            numberOfColumns = this.array[0].length;
+        } else {
+            array = null;
+            throw new InvalidParameterException("Matrix can not have zero sizes");
+        }
+    }
 
     Matrix(String path) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(path));
@@ -202,7 +214,7 @@ class Matrix {
         return this;
     }
 
-    private Matrix getMainMinor(int iElement,int jElement){                           //method of getting main minor
+    private Matrix getMinor(int iElement, int jElement){                           //method of getting main minor
         double[][] result = new double[numberOfRows - 1][numberOfColumns - 1];        //this method works. it was created to be applied in recursion method of determinant
         for (int i = 0; i < numberOfRows - 1; i++){
             for (int j = 0; j < numberOfColumns - 1; j++){
@@ -220,10 +232,8 @@ class Matrix {
                 }
             }
         }
-        this.array = result;
-        this.numberOfColumns = numberOfColumns - 1 ;
-        this.numberOfRows = numberOfRows - 1;
-        return this;
+        // todo: test this
+        return new Matrix(result);
     }
 
     /*private Matrix rowToZero(int numberOfRow){                                      //method of getting zero one row
@@ -233,25 +243,30 @@ class Matrix {
         return this;
     }*/
 
+    public void validateSquared() {
+        if (numberOfColumns != numberOfRows || numberOfColumns == 0) {
+            throw new InvalidParameterException("Matrix is not square or has zero dimension.");
+        }
+    }
+
     //this method doesn't work. let's try to make throw Gausse method!
     public double determinant() {  //I think create return method in loop is not a good idea?
-        int result = 0;         //But how to make a recursion???
+        validateSquared();
+
+        double result = 0;         //But how to make a recursion???
         if (this.numberOfColumns == 1) {
             return this.array[0][0];
         }
-        else if (this.numberOfColumns == 2){
-            double determinant2x2 = this.array[0][0]*this.array[1][1] - this.array[1][0]*this.array[0][1];
-            return determinant2x2;
+
+
+        int sign = 1;
+        for (int j = 0; j < this.numberOfColumns; j++) {
+            result += sign * this.array[0][j] * this.getMinor(0, j).determinant();
+            sign *= -1;
         }
-        else {
-            for (int j = 0; j < this.numberOfColumns; j++) {
-                return result + (int) Math.pow(-1, j) * this.array[0][j] * this.getMainMinor(0, j).determinant();
-            }
-            //for loop with return doesn't work
-            // todo : make it work
-        }
-        assert(false);
-        return 0; //just not to have any problems with return statement :D
+        // todo: test it
+
+        return result; //just not to have any problems with return statement :D
     }
 
     /*Matrix getReverseMatrix(){                          //I want to use the same operations as in toHighTriangleMatrix
@@ -264,7 +279,7 @@ class Matrix {
         }
     }*/
 
-     /*Matrix getReverseMatrix() throws IOException{                       //How work with matrix from the beginning???
+     Matrix getReverseMatrix() throws IOException{                       //How work with matrix from the beginning???
         final Matrix beginMatrix = this;
         double mainDeterminant = this.getDeterminant();
         double[][] result = new double[this.numberOfRows][this.numberOfColumns];
@@ -272,14 +287,15 @@ class Matrix {
             for (int i = 0; i < this.numberOfRows; i++){
                 for (int j = 0; j < this.numberOfColumns; j++){
                     Matrix beginMatrix1 = beginMatrix;
-                    //mBegin.getMainMinor(i,j).writeOnScreen();
-                    result[i][j] = Math.pow(-1,i+j) * beginMatrix1.getMainMinor(i,j).getDeterminant() / mainDeterminant;
+                    //mBegin.getMinor(i,j).writeOnScreen();
+                    result[i][j] = Math.pow(-1,i+j) * beginMatrix1.getMinor(i,j).getDeterminant() / mainDeterminant;
                 }
             }
         }
         this.numberOfColumns = numberOfColumns;
         this.numberOfRows = numberOfRows;
+        // todo: do not change input array, return another matrix
         this.array = result;
         return this;
-     }*/
+     }
 }
