@@ -1,3 +1,5 @@
+import com.denis.chainikov.Matrix;
+
 import java.io.IOException;
 
 public class Solution {
@@ -5,9 +7,11 @@ public class Solution {
         Matrix m1 = new Matrix("C:/Users/Denis/Desktop/M1.txt");
         Matrix m2 = new Matrix("C:/Users/Denis/Desktop/M2.txt");
 
-        Matrix m3 = new Matrix(new double[5][5]);
-        m3.toHighTriangleMatrix();
-        m3.writeOnScreen();
+        m1.printOnScreen();
+        m1.getReverseMatrix().printOnScreen();
+
+
+
     }
 }
 
