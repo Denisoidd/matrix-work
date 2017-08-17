@@ -1,7 +1,18 @@
 package com.denis.chainikov;
 
+import sun.plugin.dom.exception.InvalidStateException;
+
 import java.io.*;
 import java.security.InvalidParameterException;
+
+/**
+ * Global todo
+ *
+ * -> todo: getElement() which will return (i,j) element of a matrix.
+ * -> todo: add, multiply - return new matrix instead of this one.
+ * -> todo: remove redundant matrix sizes (numberOfColumns/rows)
+ * -> todo: describe methods @param section.
+ */
 
 /*
     This class is created for com.denis.chainikov.Matrix operating.
@@ -30,6 +41,7 @@ import java.security.InvalidParameterException;
 
     17.08.17 20:30.
 */
+
 public class Matrix {
     private double[][] array;
     private int numberOfRows;
@@ -50,13 +62,13 @@ public class Matrix {
             numberOfColumns = this.array[0].length;
         } else {
             array = null;
-            throw new InvalidParameterException("com.denis.chainikov.Matrix can not have zero sizes");
+            throw new InvalidParameterException("Matrix can not have zero sizes");
         }
     }
 
     /**
-     * Constructor of Matrix
-     * Read matrix from the file of particular view:
+     * Constructor of the Matrix
+     * Read a matrix from the file of particular view:
      * Number of Rows _ Number of Columns
      * Matrix
      *
@@ -294,9 +306,10 @@ public class Matrix {
      * todo: normal exception
      *
      * @return new Matrix - reverse Matrix
-     * @throws IOException
+     * @throws
      */
-     public Matrix getReverseMatrix() throws IOException{
+    // todo: inverse matrix
+     public Matrix getReverseMatrix() {
         double mainDeterminant = this.determinant();
         double[][] result = new double[this.numberOfRows][this.numberOfColumns];
         int sign = 1;
@@ -336,7 +349,7 @@ public class Matrix {
      * @param multiplier
      * @return this matrix with sum of rows
      */
-    private Matrix sumFirstToSecondRows(int first,int second, double multiplier ){
+    private Matrix sumFirstToSecondRows(int first,int second, double multiplier){
         for (int j = 0; j < this.numberOfColumns; j++){
             double element = array[first][j]*multiplier + array[second][j];
             array[second][j] = element;
@@ -353,7 +366,7 @@ public class Matrix {
      * @deprecated because of recursive method
      * @return determinant of this matrix in double format
      */
-    private double getDeterminant(){
+    public double getDeterminant() {
         double result;
         this.toHighTriangleMatrix();
         if (this.numberOfColumns == this.numberOfRows) {
@@ -364,9 +377,7 @@ public class Matrix {
             return result;
         }
         else {
-            System.out.println("It's not a square matrix!");
-            System.out.println("Determinant doesn't exist!");
-            return 0;
+            throw new InvalidStateException("Matrix isn't square. Determinant doesn't exist!");
         }
     }
 
@@ -375,7 +386,7 @@ public class Matrix {
      */
     private void validateSquared() {
         if (numberOfColumns != numberOfRows || numberOfColumns == 0) {
-            throw new InvalidParameterException("com.denis.chainikov.Matrix is not square or has zero dimension.");
+            throw new InvalidParameterException("Matrix is not square or has zero dimension.");
         }
     }
 
@@ -386,8 +397,8 @@ public class Matrix {
      * @param numberOfRow the row which needs to be zero row
      * @return the same matrix - with zero row
      */
-     private Matrix rowToZero(int numberOfRow){
-        for (int i = 0; i < this.numberOfColumns; i++){
+     private Matrix rowToZero(int numberOfRow) {
+        for (int i = 0; i < this.numberOfColumns; i++) {
             array[numberOfRow][i] = 0;
         }
         return this;
