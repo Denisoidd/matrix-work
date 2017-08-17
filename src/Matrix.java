@@ -247,6 +247,8 @@ class Matrix {
             for (int j = 0; j < this.numberOfColumns; j++) {
                 return result + (int) Math.pow(-1, j) * this.array[0][j] * this.getMainMinor(0, j).determinant();
             }
+            //for loop with return doesn't work
+            // todo : make it work
         }
         assert(false);
         return 0; //just not to have any problems with return statement :D
