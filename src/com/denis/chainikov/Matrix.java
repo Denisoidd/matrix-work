@@ -1,17 +1,19 @@
 package com.denis.chainikov;
 
+import com.sun.media.sound.InvalidDataException;
 import sun.plugin.dom.exception.InvalidStateException;
 
 import java.io.*;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.zip.DataFormatException;
 
 /**
  * Global todo
  *
  * -> todo: getElement() which will return (i,j) element of a matrix.
- * -> todo: add, multiply - return new matrix instead of this one.
- * -> todo: remove redundant matrix sizes (numberOfColumns/rows)
- * -> todo: describe methods @param section.
+ * -> todo: getAdjunctMatrix().
  */
 
 /*
@@ -46,14 +48,13 @@ public class Matrix {
     private double[][] array;
     private int numberOfRows;
     private int numberOfColumns;
-    final static public String path = "C:/Users/Denis/Desktop/Res.txt";
 
     /**
      * Constructor of Matrix
      * Read input array and return Matrix Object.
      *
-     * @param inputArray
-     * @throws InvalidParameterException
+     * @param inputArray - array
+     * @throws InvalidParameterException - appears if input array is wrong
      */
     public Matrix(double[][] inputArray) throws InvalidParameterException {
         array = inputArray;
@@ -67,46 +68,61 @@ public class Matrix {
     }
 
     /**
-     * Constructor of the Matrix
-     * Read a matrix from the file of particular view:
-     * Number of Rows _ Number of Columns
-     * Matrix
+     * Construct Matrix object reading array from file
      *
-     * todo: when size of matrix is bigger than 9, constructor reads only one symbol
-     *
-     * @param path
-     * @throws IOException
+     * @param path - a matrix's path
+     * @throws IOException - if path is incorrect
+     * @throws InvalidDataException appears when number of columns varies on row
      */
     public Matrix(String path) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(path));
-        String sizeString = reader.readLine();
-        char[] sizes = sizeString.toCharArray();
-        int lines = sizes[0] - 48; //size of matrix (it's written in the file)
-        int columns = sizes[2] - 48;
-        this.numberOfRows = lines;
-        this.numberOfColumns = columns;
+        int numberOfRows = 0;
+        int numberOfColumns = 0;
+        int checker;
+        ArrayList<Double> doubleList = new ArrayList<>();
 
-        double[][] matrix = new double[lines][columns];
-        for (int i = 0; i < lines; i++) {
-            String string = reader.readLine();
-            String[] strArr = string.split(" ");
-            for (int j = 0; j < columns; j++) {
-                matrix[i][j] = Double.parseDouble(strArr[j]);
+        //Read matrix, put it into ArrayList, check and find sizes of it
+        Scanner scanner = new Scanner(new FileInputStream(path));
+        while (scanner.hasNextLine()) {
+            Scanner scannerString = new Scanner(scanner.nextLine());
+            numberOfRows++;
+            checker = 0;
+            while (scannerString.hasNextDouble()){
+                doubleList.add(scannerString.nextDouble());
+                if (numberOfRows == 1) {
+                    numberOfColumns++;
+                }
+                checker++;
+            }
+            if (checker != numberOfColumns) {
+                throw new InvalidDataException("Check size of your Matrix. Number of columns is " +
+                        "different");
+            }
+            scannerString.close();
+        }
+        scanner.close();
+
+        //From ArrayList into array
+        double[][] array = new double[numberOfRows][numberOfColumns];
+        int numbOfListElem = 0;
+        for (int i = 0; i < numberOfRows; i++) {
+            for (int j = 0; j < numberOfColumns; j++) {
+                array[i][j] = doubleList.get(numbOfListElem);
+                numbOfListElem++;
             }
         }
-        reader.close();
-        this.array = matrix;
+        this.array = array;
+        this.numberOfColumns = numberOfColumns;
+        this.numberOfRows = numberOfRows;
     }
 
     /**
      * Print this particular matrix on the screen
-     * Number of Rows _ Number of Columns
+     *
      * Array
      *
-     * @throws IOException
      */
-    public void printOnScreen() throws IOException {
-        String sizes = String.format("com.denis.chainikov.Matrix size: %1$d x %2$d ", numberOfRows, numberOfColumns);
+    public void printOnScreen() {
+        String sizes = String.format("Matrix size: %1$d x %2$d ", numberOfRows, numberOfColumns);
         System.out.println(sizes);
         for (int i = 0; i < numberOfRows; i++) {
             for (int j = 0; j < numberOfColumns; j++) {
@@ -120,17 +136,14 @@ public class Matrix {
 
     /**
      * Print this particular matrix to file of following path
-     * Number of Rows _ Number of Columns
+     *
      * Array
      *
-     * @param way
-     * @throws IOException
+     * @param path - a path to matrix
+     * @throws IOException if file doesn't exist
      */
-    public void printToFile(String way) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(way));
-        String sizes = String.format("com.denis.chainikov.Matrix size: %1$d x %2$d ", numberOfRows, numberOfColumns);
-        writer.write(sizes);
-        writer.newLine();
+    public void printToFile(String path) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(path));
         for (int i = 0; i < numberOfRows; i++) {
             for (int j = 0; j < numberOfColumns; j++) {
                 String element = String.valueOf(array[i][j]);
@@ -145,12 +158,10 @@ public class Matrix {
     /**
      * This method sums this and m1 matrices.
      *
-     * todo: exception of incompatible sizes
-     *
-     * @param m1
-     * @return this Matrix object - the sum of matrices
+     * @param m1 - second matrix of sum
+     * @return new Matrix object - the sum of matrices
      */
-    public Matrix add(Matrix m1) {
+    public Matrix add(Matrix m1) throws DataFormatException{
         if ((m1.numberOfRows == this.numberOfRows) & (m1.numberOfColumns == this.numberOfColumns)) {
             double[][] resMatrix = new double[m1.numberOfRows][m1.numberOfColumns];
             double[][] firstMatrix = m1.array;
@@ -160,12 +171,10 @@ public class Matrix {
                     resMatrix[i][j] = firstMatrix[i][j] + secondMatrix[i][j];
                 }
             }
-            this.array = resMatrix;
-            return this;
+            return new Matrix(resMatrix);
 
-        } else { //work on the mistake
-            System.err.println("Incompatible sizes of com.denis.chainikov.Matrix during adding");
-            return null;
+        } else {
+            throw new DataFormatException("Sizes of matrices are not the same.");
         }
     }
 
@@ -187,12 +196,11 @@ public class Matrix {
     /**
      * This method multiplicities two Matrix objects.
      *
-     * todo: exception of incompatible sizes
      *
-     * @param secondMatrix
+     * @param secondMatrix - second matrix of multiplication
      * @return this Matrix - multiplication of two Matrix objects
      */
-    public Matrix multiply(Matrix secondMatrix) {
+    public Matrix multiply(Matrix secondMatrix) throws DataFormatException{
         if (numberOfColumns == secondMatrix.numberOfRows) {
             double[][] first = this.array;
             double[][] second = secondMatrix.array;
@@ -204,12 +212,9 @@ public class Matrix {
                     }
                 }
             }
-            this.array = sol;
-            this.numberOfColumns = secondMatrix.numberOfColumns;
-            return this;
+            return new Matrix(sol);
         } else { //work on mistake
-            System.err.println("Incompatible sizes of com.denis.chainikov.Matrix during multiplication");
-            return null;
+            throw new DataFormatException("Incompatible sizes of Matrix during multiplication");
         }
     }
 
@@ -303,12 +308,9 @@ public class Matrix {
      * This method returns reverse Matrix object
      * In process of developing
      *
-     * todo: normal exception
-     *
      * @return new Matrix - reverse Matrix
-     * @throws
+     * @throws ArithmeticException - if determinant equals zero
      */
-    // todo: inverse matrix
      public Matrix getReverseMatrix() {
         double mainDeterminant = this.determinant();
         double[][] result = new double[this.numberOfRows][this.numberOfColumns];
@@ -322,14 +324,17 @@ public class Matrix {
                 }
             }
         }
+        else {
+            throw new ArithmeticException("Determinant is not zero.");
+        }
         return new Matrix(result);
      }
 
     /**
      * This method swaps two rows first and second
      *
-     * @param first
-     * @param second
+     * @param first row
+     * @param second row
      * @return this Matrix object with swapped rows
      */
     private Matrix swapRows(int first, int second){
@@ -344,9 +349,9 @@ public class Matrix {
     /**
      * This method sum first row to the second row multiply by multiplier
      *
-     * @param first
-     * @param second
-     * @param multiplier
+     * @param first row
+     * @param second row
+     * @param multiplier - first row will be multiplied by multiplier
      * @return this matrix with sum of rows
      */
     private Matrix sumFirstToSecondRows(int first,int second, double multiplier){
@@ -360,8 +365,6 @@ public class Matrix {
     /**
      * This method use toHighTriangleMatrix at first
      * then multiply diagonal elements
-     *
-     * todo: normal exception condition
      *
      * @deprecated because of recursive method
      * @return determinant of this matrix in double format
