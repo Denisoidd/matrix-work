@@ -2,7 +2,6 @@ package com.denis.chainikov;
 
 import com.sun.media.sound.InvalidDataException;
 import sun.plugin.dom.exception.InvalidStateException;
-
 import java.io.*;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -46,8 +45,21 @@ import java.util.zip.DataFormatException;
 
 public class Matrix {
     private double[][] array;
+
     private int numberOfRows;
+
     private int numberOfColumns;
+
+    public double getElementIJ(int row,int column){
+        return array[row][column];
+    }
+    public int getNumberOfRows() {
+        return numberOfRows;
+    }
+
+    public int getNumberOfColumns() {
+        return numberOfColumns;
+    }
 
     /**
      * Constructor of Matrix
