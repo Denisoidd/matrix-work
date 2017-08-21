@@ -9,10 +9,10 @@ public class MatrixWindow extends JFrame {
     MatrixWindow() {
         super("Matrix Calculator");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new Dimension(400,300));
+        setPreferredSize(new Dimension(400,400));
         InterfaceGUI app = new InterfaceGUI();
         Component content = app.createComponent();
-        getContentPane().add(content, BorderLayout.SOUTH);
+        getContentPane().add(content);
         pack();
 
 //        addWindowListener(new WindowAdapter() {

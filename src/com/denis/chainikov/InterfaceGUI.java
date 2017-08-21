@@ -12,21 +12,47 @@ public class InterfaceGUI {
     Component createComponent() {
 
         mA = new JTextArea();
-        //mB = new JTextArea();
+        mB = new JTextArea();
         //mC = new JTextArea();
 
-        //Make a panel with Buttons.
-        JPanel panel = new JPanel();
-        JButton sumButton = new JButton("A + B = C");
-        panel.add(sumButton);
-        panel.add(MatrixPanel("Matrix A", mA));
+        //Make Buttons.
+        JButton readAFromFile = new JButton("Read A from file");
+        JButton readBFromFile = new JButton("Read B from file");
 
-        //Make panel's listeners
-        sumButton.addActionListener(new ActionListener() {
+        //Make Panel.
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(2,2,2,2));
+        panel.setMinimumSize(new Dimension(200,200));
+        panel.add(MatrixPanel("Matrix A", mA));
+        panel.add(MatrixPanel("Matrix B", mB));
+        panel.add(readAFromFile);
+        panel.add(readBFromFile);
+
+          //Make a vertical box.
+//        Box box = Box.createVerticalBox();
+//        box.add(MatrixPanel("Matrix A", mA));
+//        box.add(Box.createVerticalStrut(10));
+//        box.add(readAFromFile);
+//        box.add(Box.createVerticalStrut(10));
+//        //panel.add(Box.createRigidArea(new Dimension(10,10)));
+
+        //Make button's listeners
+        readAFromFile.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     DisplayMatrix(new Matrix("C:/Users/Denis/Desktop/M1.txt"),mA);
+                } catch (Exception ex) {
+                    System.err.println("Error " + ex);
+                }
+            }
+        });
+
+        readBFromFile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    DisplayMatrix(new Matrix("C:/Users/Denis/Desktop/M2.txt"),mB);
                 } catch (Exception ex) {
                     System.err.println("Error " + ex);
                 }
@@ -50,10 +76,11 @@ public class InterfaceGUI {
     }
 
     private JPanel MatrixPanel(String name, JTextArea jta) {
+        //Create scrollPane
         int size = 200;
         JScrollPane scrollPane = new JScrollPane(jta);
-
-        scrollPane.setPreferredSize(new Dimension(size,size));
+        scrollPane.setMinimumSize(new Dimension(size,size));
+        scrollPane.setMaximumSize(new Dimension(size,size));
         //What is the label? How does it work?
         //JLabel label = new JLabel();
         //label.setLabelFor(scrollPane);
