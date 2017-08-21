@@ -5,6 +5,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+//todo: increase font
+
 public class InterfaceGUI {
 
     private JTextArea mA, mB, mC;
@@ -79,8 +81,8 @@ public class InterfaceGUI {
         //Create scrollPane
         int size = 200;
         JScrollPane scrollPane = new JScrollPane(jta);
-        scrollPane.setMinimumSize(new Dimension(size,size));
-        scrollPane.setMaximumSize(new Dimension(size,size));
+        //scrollPane.setMinimumSize(new Dimension(size,size));
+        //scrollPane.setMaximumSize(new Dimension(size,size));
         //What is the label? How does it work?
         //JLabel label = new JLabel();
         //label.setLabelFor(scrollPane);
