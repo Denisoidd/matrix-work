@@ -2,6 +2,8 @@ package com.denis.chainikov;
 
 import com.sun.media.sound.InvalidDataException;
 import sun.plugin.dom.exception.InvalidStateException;
+
+import javax.swing.*;
 import java.io.*;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -11,7 +13,7 @@ import java.util.zip.DataFormatException;
 /**
  * Global todo
  *
- * -> todo: getElement() which will return (i,j) element of a matrix.
+ * -> todo: how to build matrix by reading properly?
  * -> todo: getAdjunctMatrix().
  */
 
@@ -53,6 +55,7 @@ public class Matrix {
     public double getElementIJ(int row,int column){
         return array[row][column];
     }
+
     public int getNumberOfRows() {
         return numberOfRows;
     }
@@ -87,14 +90,60 @@ public class Matrix {
      * @throws InvalidDataException appears when number of columns varies on row
      */
     public Matrix(String path) throws IOException {
+        matrixBuilder(new Scanner(new FileInputStream(path)));
+//        int numberOfRows = 0;
+//        int numberOfColumns = 0;
+//        int checker;
+//        ArrayList<Double> doubleList = new ArrayList<>();
+//
+//        //Read matrix, put it into ArrayList, check and find sizes of it
+//        Scanner scanner = new Scanner(new FileInputStream(path));
+//        while (scanner.hasNextLine()) {
+//            Scanner scannerString = new Scanner(scanner.nextLine());
+//            numberOfRows++;
+//            checker = 0;
+//            while (scannerString.hasNextDouble()){
+//                doubleList.add(scannerString.nextDouble());
+//                if (numberOfRows == 1) {
+//                    numberOfColumns++;
+//                }
+//                checker++;
+//            }
+//            if (checker != numberOfColumns) {
+//                throw new InvalidDataException("Check size of your Matrix. Number of columns is " +
+//                        "different");
+//            }
+//            scannerString.close();
+//        }
+//        scanner.close();
+//
+//        //From ArrayList into array
+//        double[][] array = new double[numberOfRows][numberOfColumns];
+//        int numbOfListElem = 0;
+//        for (int i = 0; i < numberOfRows; i++) {
+//            for (int j = 0; j < numberOfColumns; j++) {
+//                array[i][j] = doubleList.get(numbOfListElem);
+//                numbOfListElem++;
+//            }
+//        }
+//        this.array = array;
+//        this.numberOfColumns = numberOfColumns;
+//        this.numberOfRows = numberOfRows;
+    }
+
+    public Matrix(JTextArea jta) {
+        try {
+            matrixBuilder(new Scanner(jta.getText()));
+        } catch (InvalidDataException e) {
+            System.err.println("Error " + e);
+        }
+    }
+
+    void matrixBuilder(Scanner scanner) throws InvalidDataException{
         int numberOfRows = 0;
         int numberOfColumns = 0;
         int checker;
-        ArrayList<Double> doubleList = new ArrayList<>();
-
-        //Read matrix, put it into ArrayList, check and find sizes of it
-        Scanner scanner = new Scanner(new FileInputStream(path));
-        while (scanner.hasNextLine()) {
+        ArrayList<Double> doubleList = new ArrayList<>();while (scanner.hasNextLine()) {
             Scanner scannerString = new Scanner(scanner.nextLine());
             numberOfRows++;
             checker = 0;

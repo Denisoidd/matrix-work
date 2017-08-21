@@ -2,8 +2,6 @@ package com.denis.chainikov;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 public class MatrixWindow extends JFrame {
     MatrixWindow() {
@@ -15,14 +13,6 @@ public class MatrixWindow extends JFrame {
         Component content = app.createComponent();
         getContentPane().add(content);
         pack();
-
-//        addWindowListener(new WindowAdapter() {
-//            public void windowClosing(WindowEvent e) {
-//                System.exit(0);
-//            }
-//        });
-
-
     }
 
 }

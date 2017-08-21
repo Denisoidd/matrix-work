@@ -4,8 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Scanner;
 
 //todo: increase font
+//todo: make headings of every matrix: matrix A, ...
+//todo: replace buttons functions with lambda?
 
 public class InterfaceGUI {
 
@@ -15,28 +18,23 @@ public class InterfaceGUI {
 
         mA = new JTextArea();
         mB = new JTextArea();
-        //mC = new JTextArea();
+        mC = new JTextArea();
 
         //Make Buttons.
         JButton readAFromFile = new JButton("Read A from file");
         JButton readBFromFile = new JButton("Read B from file");
+        JButton AplusB = new JButton("A + B");
 
         //Make Panel.
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(2,2,2,2));
+        panel.setLayout(new GridLayout(2,3,2,2));
         panel.setMinimumSize(new Dimension(200,200));
         panel.add(MatrixPanel("Matrix A", mA));
         panel.add(MatrixPanel("Matrix B", mB));
+        panel.add(MatrixPanel("Matrix C", mC));
         panel.add(readAFromFile);
         panel.add(readBFromFile);
-
-          //Make a vertical box.
-//        Box box = Box.createVerticalBox();
-//        box.add(MatrixPanel("Matrix A", mA));
-//        box.add(Box.createVerticalStrut(10));
-//        box.add(readAFromFile);
-//        box.add(Box.createVerticalStrut(10));
-//        //panel.add(Box.createRigidArea(new Dimension(10,10)));
+        panel.add(AplusB);
 
         //Make button's listeners
         readAFromFile.addActionListener(new ActionListener() {
@@ -60,6 +58,21 @@ public class InterfaceGUI {
                 }
             }
         });
+
+        AplusB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Matrix m1 = new Matrix(mA);
+                    Matrix m2 = new Matrix(mB);
+                    Matrix m3 = m1.add(m2);
+                    DisplayMatrix(m3,mC);
+                } catch (Exception ex) {
+                    System.err.println("Error " + ex);
+                }
+            }
+        });
+
         return panel;
     }
 
@@ -76,6 +89,7 @@ public class InterfaceGUI {
 
         jta.setText(builder.toString());
     }
+
 
     private JPanel MatrixPanel(String name, JTextArea jta) {
         //Create scrollPane
