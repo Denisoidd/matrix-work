@@ -15,6 +15,7 @@ import java.util.zip.DataFormatException;
  *
  * -> todo: how to build matrix by reading properly?
  * -> todo: getAdjunctMatrix().
+ * -> todo: problems of input. if you read empty matrix you get the description about number of col
  */
 
 /*
@@ -239,6 +240,18 @@ public class Matrix {
         }
     }
 
+    /**
+     * This method returns minus matrix
+     * @return new matrix with opposite sign
+     */
+    public Matrix getMinusMatrix() {
+        for (int i = 0; i < numberOfRows; i++) {
+            for (int j = 0; j < numberOfColumns; j++) {
+                array[i][j] *= -1;
+            }
+        }
+        return new Matrix(array);
+    }
     /**
      * This method transposes matrix.
      *

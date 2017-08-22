@@ -1,6 +1,5 @@
 package com.denis.chainikov;
 import javax.swing.*;
-import java.awt.*;
 import java.io.IOException;
 import java.util.zip.DataFormatException;
 public class Solution {
@@ -14,7 +13,7 @@ public class Solution {
         //frame.add(component,BorderLayout.SOUTH);
         //frame.pack();
 
-        JFrame frame = new MatrixWindow();
+        JFrame frame = new com.denis.chainikov.MatrixWindow();
         frame.setVisible(true);
 
 
