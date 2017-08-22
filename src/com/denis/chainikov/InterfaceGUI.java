@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Scanner;
 
+//todo: create a method matrix in power and implement it
 //todo: change a format of output data
 //todo: how to divide it by blocks
 //todo: increase font
